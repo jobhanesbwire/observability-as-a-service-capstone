@@ -1,14 +1,11 @@
-FROM node:18-alpine
+FROM node:20-alpine
 WORKDIR /usr/src/app
 
-# Install dependencies
-COPY package.json package-lock.json* ./
-RUN npm install --production --no-audit --no-fund || true
+COPY package.json ./
+RUN npm install --omit=dev
 
-# Copy source
-COPY src/ ./src/
+COPY src ./src
 
-ENV PORT=3000
 EXPOSE 3000
 
-CMD ["node", "src/app.js"]
+CMD ["npm", "start"]
