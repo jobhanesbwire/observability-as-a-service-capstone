@@ -1,0 +1,86 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Observability stack (starter) for the capstone project
+
+Parameters:
+  VpcId:
+    Type: String
+    Description: VPC ID where resources will be launched
+  SubnetIds:
+    Type: List<String>
+    Description: Subnet IDs for Lambda and ECS
+  ECSClusterName:
+    Type: String
+    Description: ECS cluster name
+  ECSServiceName:
+    Type: String
+    Description: ECS service name
+  RdsInstanceIdentifier:
+    Type: String
+    Description: RDS instance identifier
+  AlertEmail:
+    Type: String
+    Description: Email address for SNS notifications
+
+Resources:
+  ObservabilityLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /observability/central
+
+  ObservabilityS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "observability-log-archive-${AWS::AccountId}-${AWS::Region}"
+
+  ObservabilitySNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: observability-alerts
+      Subscription:
+        - Endpoint: !Ref AlertEmail
+          Protocol: email
+
+  ObservabilityDashboard:
+    Type: AWS::CloudWatch::Dashboard
+    Properties:
+      DashboardName: observability-dashboard
+      DashboardBody: '{}'
+
+  # Placeholder Lambda execution role
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: observability-lambda-exec-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+  # Example CloudWatch Alarm (placeholder)
+  ExampleEcsCpuAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: ecs-high-cpu-example
+      Namespace: AWS/ECS
+      MetricName: CPUUtilization
+      Dimensions:
+        - Name: ClusterName
+          Value: !Ref ECSClusterName
+        - Name: ServiceName
+          Value: !Ref ECSServiceName
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 80
+      ComparisonOperator: GreaterThanThreshold
+      AlarmActions:
+        - !Ref ObservabilitySNSTopic
+
+Outputs:
+  DashboardName:
+    Value: !Ref ObservabilityDashboard

@@ -1,0 +1,27 @@
+.env
+.env.*
+# AWS credentials
+credentials
+# PEM and keys
+*.pem
+*.key
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Logs
+logs/
+*.log
+
+# IDEs
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# macOS
+.DS_Store
+
+# Do NOT ignore screenshots
+!screenshots/

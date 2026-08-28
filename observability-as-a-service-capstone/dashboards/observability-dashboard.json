@@ -1,0 +1,11 @@
+{
+  "widgets": [
+    { "type": "metric", "x": 0, "y": 0, "width": 12, "height": 6, "properties": { "metrics": [["AWS/ApplicationELB", "RequestCount", "LoadBalancer", "REPLACE_ALB_NAME"]], "title": "ALB Request Count" } },
+    { "type": "metric", "x": 12, "y": 0, "width": 12, "height": 6, "properties": { "metrics": [["AWS/ApplicationELB", "HTTPCode_Target_5XX_Count", "TargetGroup", "REPLACE_TARGET_GROUP"]], "title": "ALB 5xx" } },
+    { "type": "metric", "x": 0, "y": 6, "width": 12, "height": 6, "properties": { "metrics": [["AWS/ECS", "CPUUtilization", "ClusterName", "REPLACE_ECS_CLUSTER", "ServiceName", "REPLACE_ECS_SERVICE"]], "title": "ECS CPU Utilization" } },
+    { "type": "metric", "x": 12, "y": 6, "width": 12, "height": 6, "properties": { "metrics": [["AWS/ECS", "MemoryUtilization", "ClusterName", "REPLACE_ECS_CLUSTER", "ServiceName", "REPLACE_ECS_SERVICE"]], "title": "ECS Memory Utilization" } },
+    { "type": "metric", "x": 0, "y": 12, "width": 12, "height": 6, "properties": { "metrics": [["AWS/RDS", "DatabaseConnections", "DBInstanceIdentifier", "REPLACE_RDS_INSTANCE"]], "title": "RDS Connections" } },
+    { "type": "metric", "x": 12, "y": 12, "width": 12, "height": 6, "properties": { "metrics": [["AWS/RDS", "CPUUtilization", "DBInstanceIdentifier", "REPLACE_RDS_INSTANCE"]], "title": "RDS CPU Utilization" } },
+    { "type": "text", "x": 0, "y": 18, "width": 24, "height": 3, "properties": { "markdown": "**Alarm Overview:** Replace placeholders with actual alarm ARNs and thresholds." } }
+  ]
+}
