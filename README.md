@@ -35,18 +35,18 @@ From an operational perspective, the value of this design is that it allows a te
 
 ```mermaid
 flowchart LR
-    User[Internet / User] --> ALB[Application Load Balancer]
+    User[Internet User] --> ALB[Application Load Balancer]
 
-    ALB --> EC2[EC2 Web Tier\nApache / httpd]
-    ALB --> ECS[ECS Fargate\nApplication Tier]
-    ECS --> RDS[RDS MySQL\nData Tier]
+    ALB --> EC2[EC2 Web Tier]
+    ALB --> ECS[ECS Fargate]
+    ECS --> RDS[RDS MySQL]
 
     EC2 --> CWAgent[CloudWatch Agent]
-    CWAgent --> CW[CloudWatch Metrics + Logs]
+    CWAgent --> CW[CloudWatch]
     ECS --> CWLogs[CloudWatch Logs]
-    RDS --> RDSMon[RDS Enhanced Monitoring\nDatabase Insights]
+    RDS --> RDSMon[Database Monitoring]
 
-    CW --> LogsInsights[CloudWatch Logs Insights]
+    CW --> LogsInsights[Logs Insights]
     CWLogs --> LogsInsights
     CWLogs --> MetricFilters[Metric Filters]
     MetricFilters --> Alarm[CloudWatch Alarms]
@@ -60,8 +60,8 @@ flowchart LR
     CW --> Dashboard[CloudWatch Dashboard]
     ALB --> Dashboard
 
-    ECS --> XRay[AWS X-Ray / Tracing]
-    XRay --> TraceAnalysis[Latency & Dependency Analysis]
+    ECS --> XRay[AWS X-Ray]
+    XRay --> TraceAnalysis[Latency Analysis]
 ```
 
 This architecture reflects the way I layered monitoring, analysis, and automation across the environment. The EC2 web server publishes host metrics and access/error logs to CloudWatch. The ECS application emits structured logs and application telemetry so that I can detect error spikes, simulate latency, and target remediation. The database tier contributes CPU, connection, and load information to CloudWatch for database health visibility. CloudWatch then centralizes those signals and enables alarm logic and dashboarding.
